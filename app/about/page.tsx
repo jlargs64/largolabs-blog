@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Layout from '../layout';
 import { ExperienceChart } from './experience-chart';
 
 export const metadata: Metadata = {
@@ -8,7 +7,7 @@ export const metadata: Metadata = {
 
 export default function About() {
   return (
-    <Layout>
+    <div>
       <h1>About</h1>
       <h2>interests in tech</h2>
       <p>
@@ -112,6 +111,6 @@ export default function About() {
         puzzles or legos together. Also shout out to the occasional trashy
         reality TV show (looking at you 90 day fiance).
       </p>
-    </Layout>
+    </div>
   );
 }

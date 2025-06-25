@@ -21,11 +21,8 @@ export default function LayoutBreadcrumbs() {
           const href = '/' + segments.slice(1, index + 1).join('/');
           const isLast = index === segments.length - 1;
           return (
-            <>
-              <BreadcrumbItem
-                key={href}
-                className={isLast ? 'hidden md:block' : ''}
-              >
+            <Fragment key={href}>
+              <BreadcrumbItem className={isLast ? 'hidden md:block' : ''}>
                 <BreadcrumbLink
                   href={isLast ? pathname : href}
                   className={isLast ? 'text-muted-foreground' : ''}
@@ -34,10 +31,12 @@ export default function LayoutBreadcrumbs() {
                 </BreadcrumbLink>
               </BreadcrumbItem>
               {!isLast && <BreadcrumbSeparator className="hidden md:block" />}
-            </>
+            </Fragment>
           );
         })}
       </BreadcrumbList>
     </Breadcrumb>
   );
 }
+
+import { Fragment } from 'react';

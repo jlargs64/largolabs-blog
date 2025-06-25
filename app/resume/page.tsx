@@ -1,5 +1,5 @@
+import PdfViewer from '@/components/pdf-viewer';
 import type { Metadata } from 'next';
-import Layout from '../layout';
 
 export const metadata: Metadata = {
   title: 'Largo Labs → CV Lab Report',
@@ -7,8 +7,8 @@ export const metadata: Metadata = {
 
 export default function Resume() {
   return (
-    <Layout>
-      <h1>CV Lab Report (Resume)</h1>
-    </Layout>
+    <div className="mx-8 my-2 p-4 ">
+      <PdfViewer path="/Justin Largo Resume 2025 Anonymized.pdf" />
+    </div>
   );
 }

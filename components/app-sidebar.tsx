@@ -15,6 +15,7 @@ import { FlaskConical } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import * as React from 'react';
+import { ThemeToggle } from './theme-toggle';
 
 const data = {
   navMain: [
@@ -69,6 +70,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SearchForm />
       </SidebarHeader>
       <SidebarContent>
+        <SidebarGroup>
+          <ThemeToggle />
+        </SidebarGroup>
         <SidebarGroup>
           <SidebarMenu>
             {data.navMain.map((item, index) => (
