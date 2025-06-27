@@ -7,9 +7,9 @@ import { notFound } from 'next/navigation';
 import { getAllPosts, getPostBySlug } from '../utils';
 
 interface PostPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export async function generateStaticParams() {
@@ -20,7 +20,7 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: PostPageProps) {
-  const { slug } = params;
+  const { slug } = await params;
   const post = getPostBySlug(slug);
 
   if (!post) {
@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: PostPageProps) {
 }
 
 export default async function PostPage({ params }: PostPageProps) {
-  const { slug } = params;
+  const { slug } = await params;
   const post = getPostBySlug(slug);
 
   if (!post) {
