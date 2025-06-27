@@ -10,6 +10,7 @@ import {
 import { Separator } from '@radix-ui/react-separator';
 import type { Metadata } from 'next';
 import { Roboto, Roboto_Mono } from 'next/font/google';
+import { defaultMetadata } from '@/lib/metadata';
 import './globals.css';
 
 const robotoSans = Roboto({
@@ -22,10 +23,7 @@ const robotoMono = Roboto_Mono({
   subsets: ['latin'],
 });
 
-export const metadata: Metadata = {
-  title: 'Largo Labs',
-  description: "Justin Largo's personal website, portfolio, and blog.",
-};
+export const metadata: Metadata = defaultMetadata;
 
 export default function RootLayout({
   children,

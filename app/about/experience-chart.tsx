@@ -26,9 +26,13 @@ const chartData = [
 ];
 
 const chartConfig = {
-  skill: {
-    label: 'Skill',
-    color: 'hsl(var(--chart-1))',
+  desktop: {
+    label: 'Desktop',
+    color: 'var(--chart-1)',
+  },
+  mobile: {
+    label: 'Mobile',
+    color: 'var(--chart-2)',
   },
 } satisfies ChartConfig;
 
