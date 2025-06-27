@@ -7,6 +7,12 @@ import { RelatedPosts } from '@/components/related-posts';
 import { generateMetadata as generateOpenGraphMetadata } from '@/lib/metadata';
 import type { Metadata } from 'next';
 
+interface PostPageProps {
+  params: {
+    slug: string;
+  };
+}
+
 export async function generateStaticParams() {
   const posts = getAllPosts();
   return posts.map((post) => ({
@@ -36,11 +42,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   });
 }
 
-export default async function PostPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
+export default async function PostPage({ params }: PostPageProps) {
   const { slug } = params;
   const post = getPostBySlug(slug);
 
