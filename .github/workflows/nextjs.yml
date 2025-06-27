@@ -5,20 +5,15 @@
 name: Deploy Next.js site to Pages
 
 on:
-  # Runs on pushes targeting the default branch
   push:
     branches: ['main']
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# Give GITHUB_TOKEN the rights it needs
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Only one pages run at a time; don't cancel in-progress ones
 concurrency:
   group: 'pages'
   cancel-in-progress: false
@@ -30,20 +25,28 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Node.js & enable pnpm cache
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: pnpm
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
       - name: Detect package manager
         id: detect-pm
         run: |
-          if [ -f "${{ github.workspace }}/pnpm-lock.yaml" ]; then
+          if [ -f pnpm-lock.yaml ]; then
             echo "manager=pnpm" >> $GITHUB_OUTPUT
             echo "install=install" >> $GITHUB_OUTPUT
-            echo "build=build" >> $GITHUB_OUTPUT
-            echo "export=export" >> $GITHUB_OUTPUT
-          elif [ -f "${{ github.workspace }}/yarn.lock" ]; then
+            echo "build=run build" >> $GITHUB_OUTPUT
+            echo "export=run export" >> $GITHUB_OUTPUT
+          elif [ -f yarn.lock ]; then
             echo "manager=yarn" >> $GITHUB_OUTPUT
             echo "install=install" >> $GITHUB_OUTPUT
             echo "build=build" >> $GITHUB_OUTPUT
             echo "export=export" >> $GITHUB_OUTPUT
-          elif [ -f "${{ github.workspace }}/package-lock.json" ]; then
+          elif [ -f package-lock.json ]; then
             echo "manager=npm" >> $GITHUB_OUTPUT
             echo "install=ci" >> $GITHUB_OUTPUT
             echo "build=run build" >> $GITHUB_OUTPUT
@@ -53,22 +56,11 @@ jobs:
             exit 1
           fi
 
-      - name: Setup Node.js & cache deps
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: ${{ steps.detect-pm.outputs.manager }}
-
-      - name: Install pnpm (if needed)
-        if: steps.detect-pm.outputs.manager == 'pnpm'
-        run: npm install -g pnpm
-
       - name: Restore Next.js cache
         uses: actions/cache@v4
         with:
-          path: |
-            .next/cache
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml','**/yarn.lock','**/package-lock.json') }}-${{ hashFiles('**/*.ts','**/*.tsx','**/*.js','**/*.jsx') }}
+          path: .next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml','**/yarn.lock','**/package-lock.json') }}-${{ hashFiles('**/*.{js,jsx,ts,tsx}') }}
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml','**/yarn.lock','**/package-lock.json') }}-
 
