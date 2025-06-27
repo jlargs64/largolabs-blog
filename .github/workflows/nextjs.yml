@@ -25,14 +25,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node.js & enable pnpm cache
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: pnpm
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
 
       - name: Restore Next.js cache
         uses: actions/cache@v4
