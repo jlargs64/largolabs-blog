@@ -6,7 +6,7 @@ name: Deploy Next.js site to Pages
 
 on:
   push:
-    branches: ['main']
+    branches: ["main"]
   workflow_dispatch:
 
 permissions:
@@ -15,7 +15,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: 'pages'
+  group: "pages"
   cancel-in-progress: false
 
 jobs:
@@ -28,44 +28,22 @@ jobs:
       - name: Setup Node.js & enable pnpm cache
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
           cache: pnpm
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
-      - name: Detect package manager
-        id: detect-pm
-        run: |
-          if [ -f pnpm-lock.yaml ]; then
-            echo "manager=pnpm" >> $GITHUB_OUTPUT
-            echo "install=install" >> $GITHUB_OUTPUT
-            echo "build=run build" >> $GITHUB_OUTPUT
-            echo "export=run export" >> $GITHUB_OUTPUT
-          elif [ -f yarn.lock ]; then
-            echo "manager=yarn" >> $GITHUB_OUTPUT
-            echo "install=install" >> $GITHUB_OUTPUT
-            echo "build=build" >> $GITHUB_OUTPUT
-            echo "export=export" >> $GITHUB_OUTPUT
-          elif [ -f package-lock.json ]; then
-            echo "manager=npm" >> $GITHUB_OUTPUT
-            echo "install=ci" >> $GITHUB_OUTPUT
-            echo "build=run build" >> $GITHUB_OUTPUT
-            echo "export=run export" >> $GITHUB_OUTPUT
-          else
-            echo "Unable to determine package manager" >&2
-            exit 1
-          fi
 
       - name: Restore Next.js cache
         uses: actions/cache@v4
         with:
           path: .next/cache
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml','**/yarn.lock','**/package-lock.json') }}-${{ hashFiles('**/*.{js,jsx,ts,tsx}') }}
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**/*.{js,jsx,ts,tsx}') }}
           restore-keys: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml','**/yarn.lock','**/package-lock.json') }}-
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-
 
       - name: Install dependencies
-        run: ${{ steps.detect-pm.outputs.manager }} ${{ steps.detect-pm.outputs.install }}
+        run: pnpm install
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -73,10 +51,7 @@ jobs:
           static_site_generator: next
 
       - name: Build
-        run: ${{ steps.detect-pm.outputs.manager }} ${{ steps.detect-pm.outputs.build }}
-
-      - name: Export static HTML
-        run: ${{ steps.detect-pm.outputs.manager }} ${{ steps.detect-pm.outputs.export }}
+        run: pnpm run build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
