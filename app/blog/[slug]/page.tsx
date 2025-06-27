@@ -1,16 +1,15 @@
+import { MDXComponents } from '@/components/mdx-components';
+import { RelatedPosts } from '@/components/related-posts';
+import { SocialShare } from '@/components/social-share';
+import { generateMetadata as generateOpenGraphMetadata } from '@/lib/metadata';
+import { MDXRemote } from 'next-mdx-remote/rsc';
 import { notFound } from 'next/navigation';
 import { getAllPosts, getPostBySlug } from '../utils';
-import { MDXRemote } from 'next-mdx-remote/rsc';
-import { MDXComponents } from '@/components/mdx-components';
-import { SocialShare } from '@/components/social-share';
-import { RelatedPosts } from '@/components/related-posts';
-import { generateMetadata as generateOpenGraphMetadata } from '@/lib/metadata';
-import type { Metadata } from 'next';
 
 interface PostPageProps {
-  params: Promise<{
+  params: {
     slug: string;
-  }>;
+  };
 }
 
 export async function generateStaticParams() {
@@ -20,8 +19,8 @@ export async function generateStaticParams() {
   }));
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const { slug } = await params;
+export async function generateMetadata({ params }: PostPageProps) {
+  const { slug } = params;
   const post = getPostBySlug(slug);
 
   if (!post) {
@@ -34,7 +33,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   return generateOpenGraphMetadata({
     title: post.title,
-    description: post.summary || `A research note about ${post.title.toLowerCase()}.`,
+    description:
+      post.summary || `A research note about ${post.title.toLowerCase()}.`,
     path: `/blog/${slug}`,
     type: 'article',
     publishedTime: post.publishedAt,
@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 export default async function PostPage({ params }: PostPageProps) {
-  const { slug } = await params;
+  const { slug } = params;
   const post = getPostBySlug(slug);
 
   if (!post) {
@@ -77,10 +77,10 @@ export default async function PostPage({ params }: PostPageProps) {
       <div className="prose-custom">
         <MDXRemote source={post.content} components={MDXComponents} />
       </div>
-      
+
       {/* Social Sharing */}
       <div className="mt-12">
-        <SocialShare 
+        <SocialShare
           url={`/blog/${post.slug}`}
           title={post.title}
           description={post.summary}
