@@ -84,6 +84,7 @@ export const MDXComponents = {
   img: ({
     className,
     alt,
+    src,
     ...props
   }: {
     className?: string;
@@ -95,6 +96,7 @@ export const MDXComponents = {
     <Image
       className={cn("rounded-md border", className)}
       alt={alt || ""}
+      src={src || ""}
       width={props.width || 800}
       height={props.height || 400}
       {...props}

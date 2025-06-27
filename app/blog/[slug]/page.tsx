@@ -8,9 +8,9 @@ import { generateMetadata as generateOpenGraphMetadata } from '@/lib/metadata';
 import type { Metadata } from 'next';
 
 interface PostPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export async function generateStaticParams() {
@@ -20,8 +20,8 @@ export async function generateStaticParams() {
   }));
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const { slug } = params;
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
   const post = getPostBySlug(slug);
 
   if (!post) {
@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 export default async function PostPage({ params }: PostPageProps) {
-  const { slug } = params;
+  const { slug } = await params;
   const post = getPostBySlug(slug);
 
   if (!post) {

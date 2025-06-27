@@ -1,7 +1,7 @@
 'use client';
 
 import { Share2, Copy, ExternalLink } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface SocialShareProps {
   url: string;
@@ -11,6 +11,11 @@ interface SocialShareProps {
 
 export function SocialShare({ url, title, description }: SocialShareProps) {
   const [copied, setCopied] = useState(false);
+  const [canShare, setCanShare] = useState(false);
+  
+  useEffect(() => {
+    setCanShare(typeof navigator !== 'undefined' && 'share' in navigator);
+  }, []);
   
   const fullUrl = url.startsWith('http') ? url : `https://largolabs.dev${url}`;
   const shareText = description || title;
@@ -104,7 +109,7 @@ export function SocialShare({ url, title, description }: SocialShareProps) {
             <span>{copied ? 'Copied!' : 'Copy Link'}</span>
           </button>
           
-          {navigator.share && (
+          {canShare && (
             <button
               onClick={shareNative}
               className="flex-1 flex items-center justify-center space-x-2 px-3 py-2 bg-green-600 hover:bg-green-700 text-white text-sm rounded-md transition-colors"

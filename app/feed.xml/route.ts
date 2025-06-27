@@ -2,6 +2,8 @@ import { getAllPosts } from '@/app/blog/utils';
 
 const baseUrl = 'https://largolabs.dev';
 
+export const dynamic = 'force-static';
+
 export async function GET() {
   const posts = getAllPosts();
 

@@ -1,5 +1,4 @@
 'use client';
-import { SearchForm } from '@/components/search-form';
 import { Collapsible } from '@/components/ui/collapsible';
 import {
   Sidebar,
@@ -67,7 +66,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
-        <SearchForm />
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>

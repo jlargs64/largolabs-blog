@@ -2,6 +2,7 @@ import { getAllPosts } from './blog/utils';
 import { getAllExhibits } from './portfolio/utils';
 
 export const baseUrl = 'https://largolabs.dev';
+export const dynamic = 'force-static';
 
 export default async function sitemap() {
   const blogs = getAllPosts().map((post) => ({
@@ -14,7 +15,7 @@ export default async function sitemap() {
     lastModified: exhibit.exhibitDate,
   }));
 
-  const routes = ['', '/blog', '/portfolio', '/about', '/contact', '/resume', '/search'].map((route) => ({
+  const routes = ['', '/blog', '/portfolio', '/about', '/contact', '/resume'].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date().toISOString().split('T')[0],
   }));

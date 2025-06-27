@@ -15,9 +15,9 @@ export async function generateStaticParams() {
 export default async function ExhibitPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const { slug } = params;
+  const { slug } = await params;
   const exhibit = getExhibitBySlug(slug);
 
   if (!exhibit) {
